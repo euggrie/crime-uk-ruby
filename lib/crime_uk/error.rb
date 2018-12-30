@@ -7,9 +7,11 @@ module CrimeUk
     # @return [nil] Returns nil on success
     def self.raise_unless_successful(status, body)
       return if status.to_s.start_with? '2' # 2xx
+
       err = errors[status]
-      message = body&.fetch('errors')&.first&.fetch('detail')
+      message = body.fetch('errors').first.fetch('detail')
       raise err, (message || status.to_s) if err
+
       raise Error, "Error #{status}: #{message}"
     end
 
